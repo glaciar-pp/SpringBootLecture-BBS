@@ -11,7 +11,7 @@
 	<h3>사용자 리스트</h3>
 	<a href="/user/register">사용자 등록</a>
 	<a href="/user/logout">로그아웃</a>
-	${sessionUname}님 환영합니다.
+	${sessionUname}님 환영합니다.  ${uname}
 	<hr>
 	<table border="1">
 	<tr>
