@@ -62,6 +62,37 @@ public class UserController {
 			System.out.println("패스워드 입력이 잘못되었습니다.");
 			return "redirect:/user/list";
 		}
-		
 	}
+	
+	@GetMapping("/update/{uid}")
+	public String updateForm(@PathVariable String uid, Model model) {
+		User user = service.get(uid);
+		model.addAttribute("user", user);
+		return "user/update";
+	}
+	
+	@PostMapping("/update")
+	public String update(HttpServletRequest req) {
+		String uid = req.getParameter("uid").strip();
+		String uname = req.getParameter("uname").strip();
+		String email = req.getParameter("email").strip();
+		User user = new User(uid, uname, email);
+		service.update(user);
+		return "redirect:/user/list";
+	}
+	
+	/** 완전 삭제 */
+//	@GetMapping("/delete/{uid}")
+//	public String delete(@PathVariable String uid) {
+//		service.delete(uid);
+//		return "redirect:/user/list";
+//	}
+	
+	/** isDeleted 필드만 변경 */
+	@GetMapping("/delete/{uid}")
+	public String delete(@PathVariable String uid) {
+		service.delete(uid);
+		return "redirect:/user/list";
+	}
+	
 }
