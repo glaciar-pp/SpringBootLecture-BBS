@@ -1,6 +1,7 @@
 package com.mulcam.demo.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,17 +16,39 @@ import com.mulcam.demo.entity.Interpark;
 public class Crawling {
 
 	public static void main(String[] args) throws IOException {
-		bestSeller();
+		genieChart();
 	}
 	
 	public static List<Genie> genieChart() throws IOException {
-		
-		
-		
+		String url = "https://www.genie.co.kr/chart/top200";
+		String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
 		List<Genie> list = new ArrayList<>();
+//		url = "https://www.genie.co.kr/chart/top200?ditc=D&ymd=20221229&hh=21&rtm=Y&pg=1";
+		LocalDateTime now = LocalDateTime.now();
+		String ymd = now.toString().substring(0,10).replace("-", "");
+		String hh = now.toString().substring(11,13);
+//		System.out.println(ymd + ":" + hh);
 		
-		
-		
+		for (int i=1; i<=4; i++) {
+			url = "https://www.genie.co.kr/chart/top200?ditc=D&ymd=" + ymd + "&hh=" + hh + "&rtm=Y&pg=" + i;
+			Document doc = Jsoup.connect(url).userAgent(userAgent).get();
+			Elements trs = doc.select(".list-wrap").select("tbody").select("tr.list");
+			//System.out.println(trs.size());
+			
+			for (Element tr: trs) {
+				String rank_ = tr.select(".number").text().split(" ")[0];
+				int rank = Integer.parseInt(rank_);
+				String src_ = tr.select("a.cover > img").attr("src");
+				String image = "https:" + src_;
+				String title = tr.select(".title.ellipsis").text().strip();
+				String artist = tr.select(".artist.ellipsis").text().strip();
+				String album = tr.select(".albumtitle.ellipsis").text().strip();
+				Genie genie = new Genie(rank, image, title, artist, album);
+				list.add(genie);
+			}
+		}
+//		System.out.println(list.size());
+		list.forEach(x -> System.out.println(x));
 		return list;
 	}
 	
