@@ -1,0 +1,32 @@
+<! DOCTYPE html>
+<html lang="kr" >
+<head>
+    <meta charset="utf-8" >
+    <title>이미지 보여주기</title>
+</head>
+<body style="margin: 40px;">
+    <canvas id="tcanvas" width="100" height="100" />
+    <!-- <canvas id="tcanvas" width="800" height="500" style="border: 1px solid #000;" /> -->
+    <script>
+        var canvas = document.getElementById("tcanvas");
+        var context = canvas.getContext("2d");
+        var img = new Image();      // 이미지 객체 생성
+        img.src = "yolo.jpg";       // yolo.jpg라는 이미지 파일을 로딩 시작
+        console.log(img.width, ', ', img.height);
+        img.onload = function() {   // 이미지 로딩 완료시 실행되는 함수
+            canvas.width = img.width;
+            canvas.height = img.height;
+            // (0, 0)을 중심으로 full 사이즈로 이미지를 그림 
+            context.drawImage(img, 0, 0, img.width, img.height);
+        }
+/*         var canvas_two = document.getElementById("tcanvas_two");
+        var context_two = canvas_two.getContext ("2d");
+        var img_two = new Image();          // 이미지 객체 생성
+        img_two.src = "yolo.jpg" ;         // code.jpg라는 이미지 파일을 로딩 시작
+        img_two.onload = function() {      // 이미지 로딩 완료시 실행되는 함수
+            // 이미지 비트맵에서 (30,30)을 중심으로 100*100 크기의 영역을 캔버스에 전체에 그림
+            context.drawImage (img_two,30,30,100,100,0,0,canvas_two.width,canvas_two.height);
+        } */
+    </script>
+</body>
+</html>
