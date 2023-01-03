@@ -11,7 +11,7 @@
 <body style="margin: 40px;">
     <h3>Naver Static Map</h3>
     <hr>
-    <form action="/naver/static" method="post">
+    <form action="/map/staticMap" method="post">
         <table>
             <tr><td>Width</td><td><input type="text" name="width" value="600"></td></tr>
             <tr><td>Height</td><td><input type="text" name="height" value="400"></td></tr>

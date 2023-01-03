@@ -2,9 +2,12 @@ package com.mulcam.demo.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mulcam.demo.entity.StaticMap;
 
 @Controller
 @RequestMapping("/map")
@@ -17,11 +20,26 @@ public class MapController {
 	private String secretKey;
 	
 	@GetMapping("/staticMap")
-	public String staticMap() {
-		String url = "https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?w=300&h=300&center=127.1054221,37.3591614&level=16";
-		url += "&X-NCP-APIGW-API-KEY-ID=" + accessId;
-		url += "&X-NCP-APIGW-API-KEY=" + secretKey;
-		
+	public String staticForm() {
 		return "map/staticForm";
 	}
+	
+	@PostMapping("/staticMap")
+	public String staticMap(StaticMap map, Model model) {
+		String url = "https://naveropenapi.apigw.ntruss.com/map-static/v2/raster"
+					+ "?w=" + map.getWidth()
+					+ "&h=" + map.getHeight()
+					+ "&center=" + map.getLng() + "," + map.getLat()
+					+ "&level=" + map.getLevel()
+					+ "&maptype=" + map.getMaptype()
+					+ "&format=" + map.getFormat()
+					+ "&scale=" + map.getScale()
+					+ "&lang=" + map.getLang()
+					+ "&X-NCP-APIGW-API-KEY-ID=" + accessId
+					+ "&X-NCP-APIGW-API-KEY=" + secretKey;
+		
+		model.addAttribute("url", url);
+		return "map/staticResult";
+	}
+	
 }
