@@ -1,6 +1,6 @@
 package com.mulcam.demo.entity;
 
-public class Interpark {
+public class Book {
 	private int rank;
 	private String image;
 	private String title;
@@ -8,8 +8,8 @@ public class Interpark {
 	private String company;
 	private int price;
 	
-	public Interpark() { }
-	public Interpark(int rank, String image, String title, String author, String company, int price) {
+	public Book() { }
+	public Book(int rank, String image, String title, String author, String company, int price) {
 		this.rank = rank;
 		this.image = image;
 		this.title = title;

@@ -1,13 +1,13 @@
 package com.mulcam.demo.entity;
 
-public class Genie {
+public class Chart {
 	private int rank;
 	private String image;
 	private String title;
 	private String artist;
 	private String album;
-	public Genie() { }
-	public Genie(int rank, String image, String title, String artist, String album) {
+	public Chart() { }
+	public Chart(int rank, String image, String title, String artist, String album) {
 		this.rank = rank;
 		this.image = image;
 		this.title = title;

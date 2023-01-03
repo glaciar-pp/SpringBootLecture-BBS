@@ -10,19 +10,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.mulcam.demo.entity.Genie;
-import com.mulcam.demo.entity.Interpark;
+import com.mulcam.demo.entity.Chart;
+import com.mulcam.demo.entity.Book;
 
-public class Crawling {
+public class Old {
 
 	public static void main(String[] args) throws IOException {
 		genieChart();
 	}
 	
-	public static List<Genie> genieChart() throws IOException {
+	public static List<Chart> genieChart() throws IOException {
 		String url = "https://www.genie.co.kr/chart/top200";
 		String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36";
-		List<Genie> list = new ArrayList<>();
+		List<Chart> list = new ArrayList<>();
 //		url = "https://www.genie.co.kr/chart/top200?ditc=D&ymd=20221229&hh=21&rtm=Y&pg=1";
 		LocalDateTime now = LocalDateTime.now();
 		String ymd = now.toString().substring(0,10).replace("-", "");
@@ -43,7 +43,7 @@ public class Crawling {
 				String title = tr.select(".title.ellipsis").text().strip();
 				String artist = tr.select(".artist.ellipsis").text().strip();
 				String album = tr.select(".albumtitle.ellipsis").text().strip();
-				Genie genie = new Genie(rank, image, title, artist, album);
+				Chart genie = new Chart(rank, image, title, artist, album);
 				list.add(genie);
 			}
 		}
@@ -52,7 +52,7 @@ public class Crawling {
 		return list;
 	}
 	
-	public static List<Interpark> bestSeller() throws IOException {
+	public static List<Book> bestSeller() throws IOException {
 		String urlBase = "http://book.interpark.com";
 		String urlSub = "/display/collectlist.do?_method=bestsellerHourNew&bookblockname=b_gnb&booklinkname=%BA%A3%BD%BA%C6%AE%C1%B8&bid1=bgnb_mn&bid2=LiveRanking&bid3=main&bid4=001";
 		String url = urlBase + urlSub;
@@ -60,7 +60,7 @@ public class Crawling {
 		Elements lis = doc.select(".listItem.singleType");
 //		System.out.println(lis.size());
 		
-		List<Interpark> list = new ArrayList<>();
+		List<Book> list = new ArrayList<>();
 		for (Element li: lis) {
 			String title = li.select(".itemName").text().strip();
 			String author = li.select(".author").text().strip();
@@ -77,7 +77,7 @@ public class Crawling {
 			}
 			int rank = Integer.parseInt(rank_);
 			
-			Interpark ip = new Interpark(rank, src, title, author, company, price);
+			Book ip = new Book(rank, src, title, author, company, price);
 			list.add(ip);
 		}
 //		list.forEach(x -> System.out.println(x));

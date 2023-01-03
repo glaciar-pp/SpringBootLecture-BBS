@@ -8,24 +8,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mulcam.demo.entity.Genie;
-import com.mulcam.demo.entity.Interpark;
-import com.mulcam.demo.service.Crawling;
+import com.mulcam.demo.entity.Chart;
+import com.mulcam.demo.entity.Book;
+import com.mulcam.demo.service.Old;
 
 @Controller
-@RequestMapping("/crawling")
-public class CrawlingController {
+@RequestMapping("/old")
+public class OldController {
 
 	@GetMapping("/interpark")
 	public String interpark(Model model) throws IOException {
-		List<Interpark> list = Crawling.bestSeller();
+		List<Book> list = Old.bestSeller();
 		model.addAttribute("bookList", list);
 		return "crawling/interpark";
 	}
 	
 	@GetMapping("/genie")
 	public String genie(Model model) throws IOException {
-		List<Genie> list = Crawling.genieChart();
+		List<Chart> list = Old.genieChart();
 		model.addAttribute("songList", list);
 		return "crawling/genie2";
 	}
