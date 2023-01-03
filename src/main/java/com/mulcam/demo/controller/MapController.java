@@ -16,10 +16,12 @@ public class MapController {
 	@Value("${naver.secretKey}")
 	private String secretKey;
 	
-	@ResponseBody
 	@GetMapping("/staticMap")
 	public String staticMap() {
+		String url = "https://naveropenapi.apigw.ntruss.com/map-static/v2/raster?w=300&h=300&center=127.1054221,37.3591614&level=16";
+		url += "&X-NCP-APIGW-API-KEY-ID=" + accessId;
+		url += "&X-NCP-APIGW-API-KEY=" + secretKey;
 		
-		return "accessId: " + accessId + "<br>secretKey: " + secretKey;
+		return "map/staticForm";
 	}
 }
