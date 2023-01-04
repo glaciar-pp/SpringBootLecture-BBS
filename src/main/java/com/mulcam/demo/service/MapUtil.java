@@ -1,68 +1,27 @@
-package com.mulcam.demo.controller;
+package com.mulcam.demo.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.mulcam.demo.entity.StaticMap;
-
-@Controller
-@RequestMapping("/map")
-public class MapController {
-
+public class MapUtil {
+	@Value("${roadAddrKey}") private String roadAddrKey;
 	@Value("${naver.accessId}") private String accessId;
 	@Value("${naver.secretKey}") private String secretKey;
-	@Value("${roadAddrKey}") private String roadAddrKey;
 	
-	@GetMapping("/staticMap")
-	public String staticForm() {
-		return "map/staticForm";
-	}
-	
-	@PostMapping("/staticMap")
-	public String staticMap(StaticMap map, Model model) throws UnsupportedEncodingException {
-		String url = "https://naveropenapi.apigw.ntruss.com/map-static/v2/raster"
-					+ "?w=" + map.getWidth()
-					+ "&h=" + map.getHeight()
-					+ "&center=" + map.getLng() + "," + map.getLat()
-					+ "&level=" + map.getLevel()
-					+ "&maptype=" + map.getMaptype()
-					+ "&format=" + map.getFormat()
-					+ "&scale=" + map.getScale()
-					+ "&lang=" + map.getLang()
-					+ "&X-NCP-APIGW-API-KEY-ID=" + accessId
-					+ "&X-NCP-APIGW-API-KEY=" + secretKey;
-		
-		String marker = "type:d|size:mid|pos:127.0724 37.5383";
-		marker = URLEncoder.encode(marker, "utf-8");
-		url += "&markers=" + marker;
-
-		marker = "type:t|size:tiny|pos:127.0824 37.5383|label:광진구청|color:red";
-		marker = URLEncoder.encode(marker, "utf-8");
-		url += "&markers=" + marker;
-		
-		model.addAttribute("url", url);
-		return "map/staticResult";
-	}
-	
-	@ResponseBody
-	@GetMapping("/roadAddr/{keyword}")
-	public String roadAddr(@PathVariable String keyword) throws Exception {
+	/**
+	 * 건물명으로부터 도로명 주소를 구해주는 메소드
+	 */
+	public String getAddr(String keyword) throws Exception {
 		int currentPage = 1;
 		int countPerPage = 10;
 		String resultType = "json";
@@ -94,9 +53,10 @@ public class MapController {
 		return sb.toString() + "<br>" + roadAddr;
 	}
 	
-	@ResponseBody
-	@GetMapping("/geocode")
-	public String geocode() throws Exception {
+	/**
+	 * 도로명주소로부터 경도, 위도 정보를 구해주는 메소드
+	 */
+	public List<String> geocode() throws Exception {
 		String apiUrl = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode";
 		String query = "서울특별시 광진구 자양로 117(자양동)";
 		query = URLEncoder.encode(query, "utf-8");
@@ -126,12 +86,11 @@ public class MapController {
 //		JSONArray addresses = (JSONArray) object.get("addresses");
 //		JSONObject address = (JSONObject) addresses.get(0);
 		JSONObject address = (JSONObject) ((JSONArray) object.get("addresses")).get(0);
-		String lng_ = (String) address.get("x");
-		String lat_ = (String) address.get("y");
-		Double lng = Double.parseDouble(lng_);
-		Double lat = Double.parseDouble(lat_);
+		String lng = (String) address.get("x");
+		String lat = (String) address.get("y");
 		
-		return "경도: " + lng + ", 위도: " + lat;
+		List<String> list = new ArrayList<>();
+		list.add(lng); list.add(lat);
+		return list;
 	}
-	
 }
