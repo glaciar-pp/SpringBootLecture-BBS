@@ -6,12 +6,14 @@ public class CsvTest {
 
 	public static void main(String[] args) {
 		CsvUtil cu = new CsvUtil();
-		List<List<String>> list = cu.readCsv("c:/Temp/sample2.tsv", "\t", 1);
+		List<List<String>> list = cu.readCsv("c:/Temp/sample.csv", ",", 1);
 		for (List<String> row: list) {
 			for (String s: row)
 				System.out.print(s + " ");
 			System.out.println();
 		}
+		
+		cu.writeCsv("c:/Temp/sample3.csv", list);
 	}
 
 }

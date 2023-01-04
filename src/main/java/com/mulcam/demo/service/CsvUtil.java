@@ -1,10 +1,13 @@
 package com.mulcam.demo.service;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CsvUtil {
@@ -30,10 +33,11 @@ public class CsvUtil {
 				// skipLine 동작이 행해져야 하는 경우에는 continue
 				if (skipLine > lineNo++)
 					continue;
-				List<String> aLine = new ArrayList<>();
 				String[] lineArray = line.split(separator);
-				for (String s: lineArray)
-					aLine.add(s);			// 한 줄의 데이터가 리스트로 만들어 짐
+//				List<String> aLine = new ArrayList<>();
+//				for (String s: lineArray)
+//					aLine.add(s);			// 한 줄의 데이터가 리스트로 만들어 짐
+				List<String> aLine = Arrays.asList(lineArray);
 				csvList.add(aLine);
 			}
 		} catch (Exception e) {
@@ -48,4 +52,34 @@ public class CsvUtil {
 		return csvList;
 	}
 
+	public void writeCsv(String filename, List<List<String>> dataList) {
+		writeCsv(filename, dataList, ",");
+	}
+	
+	public void writeCsv(String filename, List<List<String>> dataList, String separator) {
+		File csv = new File(filename);
+		BufferedWriter bw = null;
+		try {
+			bw = new BufferedWriter(new FileWriter(csv));			// overwrite
+//			bw = new BufferedWriter(new FileWriter(csv), true);		// append
+			for (List<String> data: dataList) {
+				String line = "";
+				for (int i=0; i<data.size(); i++) {
+					line += data.get(i);
+					if (i < data.size()-1)
+						line += separator;
+				}
+				bw.write(line + "\n");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				bw.flush(); bw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }

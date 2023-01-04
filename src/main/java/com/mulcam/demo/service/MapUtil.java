@@ -12,16 +12,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 public class MapUtil {
-	@Value("${roadAddrKey}") private String roadAddrKey;
-	@Value("${naver.accessId}") private String accessId;
-	@Value("${naver.secretKey}") private String secretKey;
-	
 	/**
 	 * 건물명으로부터 도로명 주소를 구해주는 메소드
 	 */
-	public String getAddr(String keyword) throws Exception {
+	public String getRoadAddr(String keyword, String roadAddrKey) throws Exception {
 		int currentPage = 1;
 		int countPerPage = 10;
 		String resultType = "json";
@@ -52,15 +49,14 @@ public class MapUtil {
 		JSONObject jusoItem = (JSONObject) juso.get(0);
 		String roadAddr = (String) jusoItem.get("roadAddr");
 		
-		return sb.toString() + "<br>" + roadAddr;
+		return roadAddr;
 	}
 	
 	/**
 	 * 도로명주소로부터 경도, 위도 정보를 구해주는 메소드
 	 */
-	public List<String> geocode() throws Exception {
+	public List<String> getGeocode(String query, String accessId, String secretKey) throws Exception {
 		String apiUrl = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode";
-		String query = "서울특별시 광진구 자양로 117(자양동)";
 		query = URLEncoder.encode(query, "utf-8");
 		apiUrl += "?query=" + query;
 		

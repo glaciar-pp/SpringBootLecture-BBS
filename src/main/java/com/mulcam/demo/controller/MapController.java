@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mulcam.demo.entity.StaticMap;
+import com.mulcam.demo.service.CsvUtil;
+import com.mulcam.demo.service.MapUtil;
 
 @Controller
 @RequestMapping("/map")
@@ -134,6 +138,32 @@ public class MapController {
 		Double lat = Double.parseDouble(lat_);
 		
 		return "경도: " + lng + ", 위도: " + lat;
+	}
+	
+	@ResponseBody
+	@GetMapping("/hotPlaces")
+	public String hotPlaces() throws Exception {
+		String[] hotPlaces = {"광진구청", "건국대학교", "세종대학교", "워커힐호텔"};
+		String filename = "c:/Temp/광진구명소.csv";
+		MapUtil mu = new MapUtil();
+		
+		String output = "";
+		List<List<String>> dataList = new ArrayList<>();
+		for (String place: hotPlaces) {
+			List<String> row = new ArrayList<>();
+			String roadAddr = mu.getRoadAddr(place, roadAddrKey);
+			output += roadAddr + "<br>";
+			List<String> geocode = mu.getGeocode(roadAddr, accessId, secretKey);
+			row.add(place);
+			row.add(roadAddr);
+			row.add(geocode.get(0));		// Longitude(경도)
+			row.add(geocode.get(1)); 		// Latitude(위도)
+			dataList.add(row);
+		}
+		
+		CsvUtil cu = new CsvUtil();
+		cu.writeCsv(filename, dataList);
+		return output;
 	}
 	
 }
