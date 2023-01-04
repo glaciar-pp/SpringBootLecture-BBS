@@ -47,6 +47,8 @@ public class MapUtil {
 		JSONObject object = (JSONObject) parser.parse(sb.toString());
 		JSONObject results = (JSONObject) object.get("results");
 		JSONArray juso = (JSONArray) results.get("juso");
+		if (juso == null || juso.size() == 0)
+			return null;
 		JSONObject jusoItem = (JSONObject) juso.get(0);
 		String roadAddr = (String) jusoItem.get("roadAddr");
 		
