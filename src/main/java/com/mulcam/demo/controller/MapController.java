@@ -140,7 +140,6 @@ public class MapController {
 		return "경도: " + lng + ", 위도: " + lat;
 	}
 	
-	@ResponseBody
 	@GetMapping("/hotPlaces")
 	public String hotPlaces() throws Exception {
 		String[] hotPlaces = {"광진구청", "건국대학교", "세종대학교", "워커힐호텔"};
@@ -163,7 +162,34 @@ public class MapController {
 		
 		CsvUtil cu = new CsvUtil();
 		cu.writeCsv(filename, dataList);
-		return output;
+		return "redirect:/map/hotPlacesResult";
+	}
+	
+	@GetMapping("/hotPlacesResult")
+	public String hotPlacesResult(Model model) throws Exception {
+		CsvUtil cu = new CsvUtil();
+		List<List<String>> dataList = cu.readCsv("c:/Temp/광진구명소.csv");
+		String marker = "";
+		double lngSum = 0.0, latSum = 0.0;
+		// "type:t|size:tiny|pos:127.0824 37.5383|label:광진구청|color:red"
+		for (List<String> list: dataList) {
+			double lng = Double.parseDouble(list.get(2));
+			double lat = Double.parseDouble(list.get(3));
+			lngSum += lng; latSum += lat;
+			marker += "&markers=type:t|size:tiny|pos:" + lng + "%20" + lat + "|label:"
+					+ URLEncoder.encode(list.get(0), "utf-8") + "|color:red";
+		}
+		double lngCenter = lngSum / dataList.size();
+		double latCenter = latSum / dataList.size();
+		String url = "https://naveropenapi.apigw.ntruss.com/map-static/v2/raster"
+				+ "?w=" + 600 + "&h=" + 400
+				+ "&center=" + lngCenter + "," + latCenter
+				+ "&level=" + 12 + "&scale=" + 2
+				+ "&X-NCP-APIGW-API-KEY-ID=" + accessId
+				+ "&X-NCP-APIGW-API-KEY=" + secretKey;
+		
+		model.addAttribute("url", url+marker);
+		return "map/staticResult";
 	}
 	
 }
