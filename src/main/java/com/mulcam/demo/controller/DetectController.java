@@ -28,7 +28,7 @@ public class DetectController {
 	@GetMapping("/naver")
 	public String naver(Model model) throws Exception {
 		String apiURL = "https://naveropenapi.apigw.ntruss.com/vision-obj/v1/detect"; // 객체 인식
-		File uploadFile = new File("/Temp/yolo-test.jpg");
+		File uploadFile = new File("/Temp/yolo-test2.jfif");
 		
 		URL url = new URL(apiURL);
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
