@@ -18,7 +18,7 @@
 	<c:forEach var="song" items="${songList}">
 		<tr>
 			<td>${song.rank}</td>
-			<td><img src="${song.image}" height="36"></td>
+			<td><img src="${song.imgSrc}" height="36"></td>
 			<td>${song.title}</td>
 			<td>${song.artist}</td>
 			<td>${song.album}</td>

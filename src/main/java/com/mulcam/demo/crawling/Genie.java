@@ -1,35 +1,38 @@
-package com.mulcam.demo.entity;
+package com.mulcam.demo.crawling;
 
-public class Chart {
+public class Genie {
 	private int rank;
-	private String image;
+	private String imgSrc;
 	private String title;
 	private String artist;
 	private String album;
-	public Chart() { }
-	public Chart(int rank, String image, String title, String artist, String album) {
+	
+	public Genie() { }
+	public Genie(int rank, String imgSrc, String title, String artist, String album) {
 		this.rank = rank;
-		this.image = image;
+		this.imgSrc = imgSrc;
 		this.title = title;
 		this.artist = artist;
 		this.album = album;
 	}
+	
 	@Override
 	public String toString() {
-		return "Genie [rank=" + rank + ", image=" + image + ", title=" + title + ", artist=" + artist + ", album="
+		return "Genie [rank=" + rank + ", imgSrc=" + imgSrc + ", title=" + title + ", artist=" + artist + ", album="
 				+ album + "]";
 	}
+	
 	public int getRank() {
 		return rank;
 	}
 	public void setRank(int rank) {
 		this.rank = rank;
 	}
-	public String getImage() {
-		return image;
+	public String getImgSrc() {
+		return imgSrc;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setImgSrc(String imgSrc) {
+		this.imgSrc = imgSrc;
 	}
 	public String getTitle() {
 		return title;
