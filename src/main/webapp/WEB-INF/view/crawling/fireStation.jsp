@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	<title>Fire Station</title>
 </head>
-<body>
+<body style="margin: 40px;">
 	<h3>서울 소재 소방서 현황</h3>
 	<hr>
 	<table border="1">
