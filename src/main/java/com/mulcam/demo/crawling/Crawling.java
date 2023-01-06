@@ -8,6 +8,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -64,6 +69,58 @@ public class Crawling {
 				list.add(genie);
 			}
 		}
+		return list;
+	}
+	
+	// Driver
+	private WebDriver driver;
+	// Properties
+	private static final String WEB_DRIVER_ID = "webdriver.chrome.driver";
+	private static final String WEB_DRIVER_PATH = "/DevTools/chromedriver/chromedriver.exe";
+	
+	public List<FireStation> fireStation() throws Exception {
+		// Driver Setup
+		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("headless");
+		driver = new ChromeDriver(options);
+
+		String url = "https://www.nfa.go.kr/nfa/introduce/status/firestationidfo";
+		driver.get(url);
+		Thread.sleep(3000); 		// 3초 지연
+		
+		WebElement inputBox = driver.findElement(By.cssSelector("#searchKeyword"));
+		inputBox.sendKeys("서울");
+		WebElement searchBtn = driver.findElement(By.cssSelector("#fsSearchBtn"));
+		searchBtn.click();
+		Thread.sleep(2000);
+		
+		String xpath = "//*[@id=\"listForm\"]/div/section/div/p/strong[2]";		// 건수
+		String num_ = driver.findElement(By.xpath(xpath)).getText().strip();	// 100건
+		int num = Integer.parseInt(num_.substring(0, num_.length() - 1));
+		int pages = (int) Math.ceil(num / 10.);
+		
+		List<FireStation> list = new ArrayList<>();
+		for (int page = 1; page <= pages; page++) {
+			if (page > 1 && page % 2 == 0) {
+				driver.findElement(By.xpath("//*[@id=\"listForm\"]/div/section/ul/li[1]/div/div/ul/li[4]/a")).click();
+				Thread.sleep(1000);
+			}
+			if (page > 1 && page % 2 == 1) {
+				driver.findElement(By.cssSelector(".next_page")).click();
+				Thread.sleep(1000);
+			}
+			Document doc = Jsoup.parse(driver.getPageSource());
+			Elements lis = doc.select(".stations-list > li");
+			for (Element li: lis) {
+				String name = li.select(".title").text().strip();
+				String addr = li.select("address").text().strip();
+				String tel = li.select(".tel").text().strip();
+				FireStation fs = new FireStation(name, addr, tel);
+				list.add(fs);
+			}
+		}
+		driver.quit();
 		return list;
 	}
 	
