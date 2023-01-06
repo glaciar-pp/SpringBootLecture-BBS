@@ -18,7 +18,7 @@
 	<c:forEach var="book" items="${bookList}">
 		<tr>
 			<td>${book.rank}</td>
-			<td><img src="${book.image}" height="36"></td>
+			<td><img src="${book.imgSrc}" height="36"></td>
 			<td>${book.title}</td>
 			<td>${book.author}</td>
 			<td>${book.company}</td>
