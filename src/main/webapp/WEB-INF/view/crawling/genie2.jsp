@@ -1,20 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-	<meta charset="UTF-8">
-	<title>Genie Chart</title>
-	<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <%@ include file="../common/heading.jsp" %>
+    <style>
+        th, td { text-align: center; }
+    </style>
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <style>
-        th, td {
-            text-align: center;
-        } 
-    </style>
     <script>
         $(document).ready(function() {
             $('#example').DataTable({
@@ -48,28 +43,41 @@
     </script>
 </head>
 <body>
-	<h3>Genie Chart</h3>
-	<hr>
-	<table id="example" class="display compact" style="width:100%;">
-		<thead>
-			<tr>
-				<th>index</th><th>순위</th><th>이미지</th><th>제목</th><th>아티스트</th><th>앨범</th>
-			</tr>
-		</thead>
-		<tbody>
-		<c:forEach var="song" items="${songList}" varStatus="loop">
-			<tr>
-				<td>${loop.index}</td>
-				<td>${song.rank}</td>
-				<td><img src="${song.imgSrc}" height="36"></td>
-				<td>${song.title}</td>
-				<td>${song.artist}</td>
-				<td>${song.album}</td>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
-	
-    
+    <%@ include file="../common/top.jsp" %>
+
+    <div class="container" style="margin-top: 80px;">
+        <div class="row">
+            <%@ include file="../common/aside.jsp" %>
+            
+            <!-- =================== main =================== -->
+            <div class="col-sm-9">
+            	<h3><strong>Genie Chart</strong></h3>
+            	<hr>
+				<table id="example" class="display compact" style="width:100%;">
+					<thead>
+						<tr>
+							<th>index</th><th>순위</th><th>이미지</th><th>제목</th><th>아티스트</th><th>앨범</th>
+						</tr>
+					</thead>
+					<tbody>
+					<c:forEach var="song" items="${songList}" varStatus="loop">
+						<tr>
+							<td>${loop.index}</td>
+							<td>${song.rank}</td>
+							<td><img src="${song.imgSrc}" height="36"></td>
+							<td>${song.title}</td>
+							<td>${song.artist}</td>
+							<td>${song.album}</td>
+						</tr>
+					</c:forEach>
+					</tbody>
+				</table>
+			</div>
+            <!-- =================== main =================== -->
+            
+        </div>
+    </div>
+
+    <%@ include file="../common/bottom.jsp" %>
 </body>
 </html>
